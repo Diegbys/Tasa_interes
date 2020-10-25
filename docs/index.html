@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tasa de Interés</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo center"><i class="material-icons left">attach_money</i> Tasa de Interés</a>
+        </div>
+    </nav>
+
+    <div class="section"></div>
+
+    <div id="info">
+        <div class="container">
+            <div class="row">
+                <form class="col s12">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <select v-model="interest_type">
+                                <option value="" disabled selected>Seleccione el tipo de interés</option>
+                                <option v-for="interest in interests" :value="interest.value">{{interest.name}}</option>
+                            </select>
+                            <label>Tipo de interés</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s4">
+                            <input v-model="initial_capital" id="input_Numeric" type="text" class="validate" onkeypress="return isNumber(event);">
+                            <label for="last_name">Capital Inicial</label>
+                        </div>
+                        <div class="input-field col s1">
+                            <select v-model="money_initialCapital">
+                                    <option value="" disabled selected>Moneda</option>
+                                    <option value="BsF">BsF</option>
+                                    <option value="$">$</option>
+                                </select>
+                            <label>Moneda</label>
+                        </div>
+                        <div class="input-field col s2">
+                            <input v-model="tasa" id="input_Numeric" type="text" class="validate" onkeypress="return isNumber(event)">
+                            <label for=" last_name ">Tasa de interes %</label>
+                        </div>
+                        <div class="input-field col s1 ">
+                            <select v-model="timeTasa">
+                                <option value=" " disabled selected></option>
+                                <option v-for="time in time_interest" :value="time.value">{{time.name}}</option>
+                            </select>
+                            <label>Unidad</label>
+                        </div>
+                        <div class="input-field col s2">
+                            <input v-model="time" id="input_Numeric" type="text" class="validate" onkeypress="return isNumber(event);">
+                            <label for="last_name">Tiempo</label>
+                        </div>
+                        <div class="input-field col s1">
+                            <select v-model="unit_time">
+                                    <option value="" disabled selected></option>
+                                    <option v-for="time in time_interest" :value="time.value">{{time.name}}</option>
+                            </select>
+                            <label>Unidad</label>
+                        </div>
+                        <template v-if="unit_time == 1">
+                                <div class="input-field col s1">
+                                    <select v-model="meses_años">
+                                            <option value="" selected></option>
+                                            <option v-for="mes in meses" :value="mes">{{mes}}</option>
+                                    </select>
+                                    <label>Mes</label>
+                                </div>
+                        </template>
+                    </div>
+                    <div class="row">
+                        <template v-if="interest_type == 1 || interest_type == ''">
+                                <div class="input-field col s3">
+                                    <input disabled v-model="frecuency" id="input_Numeric" type="text" class="validate" onkeypress="return isNumber(event)">
+                                    <label for=" last_name ">Frecuencia</label>
+                                </div>
+                                <div class="input-field col s1 ">
+                                    <select v-model="time_frecuency">
+                                        <option value=" " disabled selected></option>
+                                        <option v-for="time in time_interest" :value="time.value">{{time.name}}</option>
+                                    </select>
+                                    <label>Unidad</label>
+                                </div>
+                        </template>
+                        <template v-else>
+                                <div class="input-field col s3">
+                                    <input v-model="frecuency" id="input_Numeric" type="text" class="validate" onkeypress="return isNumber(event)">
+                                    <label for=" last_name ">Frecuencia</label>
+                                </div>
+                                <div class="input-field col s1 ">
+                                    <select v-model="time_frecuency">
+                                        <option value=" " disabled selected></option>
+                                        <option v-for="time in time_interest" :value="time.value">{{time.name}}</option>
+                                    </select>
+                                    <label>Unidad</label>
+                                </div>
+                        </template>
+                        <div class="input-field col s4">
+                            <input disabled :value="pagos" id="disabled" type="text" class="validate">
+                            <label for="disabled">Pagos</label>
+                        </div>
+                        <div class="input-field col s4">
+                            <input disabled :value="tasa_equivalente + '%'" id="disabled" type="text" class="validate">
+                            <label for="disabled">Tasa de interés equivalente</label>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                    </div>
+                </form>
+            </div>
+            <button href="#" class="btn" v-on:click="submit"> enviar</button>
+
+            <div class="section">
+            </div>
+
+            <table class="highlight">
+                <thead>
+                    <tr>
+                        <th>Periodo</th>
+                        <th>Capital Inicial ({{money_initialCapital}})</th>
+                        <th>Intereses ({{money_initialCapital}})</th>
+                        <th>Capital FInal ({{money_initialCapital}})</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr v-for="row in table">
+                        <td>Periodo {{row.periodo}}</td>
+                        <td>{{row.capitalI}}</td>
+                        <td>{{row.intereses}}</td>
+                        <td>{{row.capitalF}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+
+
+
+
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js "></script>
+
+    <script src="js/main.js "></script>
+</body>
+
+</html>
