@@ -41,13 +41,68 @@ const info = new Vue({
     },
     methods: {
         simple() {
+
+            this.validacion();
+
+            var periodo = parseInt(this.pagos, 10);
+            var interes = parseFloat(this.tasa_equivalente);
+            var capitalInicial = parseFloat(this.initial_capital);
+            var interes_acumulado = 0
+
+            var table = []
+
+            for (let i = 0; i <= periodo; i++) {
+
+                if (i == 0) {
+                    var interes_row = 0;
+                } else {
+                    var interes_row = capitalInicial * (interes / 100);
+                }
+                interes_acumulado += interes_row;
+                let capitalFinal = capitalInicial + interes_acumulado;
+                let row = { periodo: i, capitalI: capitalInicial, intereses: interes_row, capitalF: capitalFinal }
+
+                table.push(row);
+            }
+
+            this.table = table;
+
+
+        },
+        compuesto() {
+            this.validacion();
+
+            var periodo = parseInt(this.pagos, 10);
+            var interes = parseFloat(this.tasa_equivalente);
+            var capitalInicial = parseFloat(this.initial_capital);
+
+            var table = []
+
+            for (let i = 0; i <= periodo; i++) {
+                if (i == 0) {
+                    var interes_row = 0;
+                } else {
+                    var interes_row = capitalInicial * (interes / 100);
+                }
+
+                let capitalFinal = capitalInicial + interes_row;
+                let row = { periodo: i, capitalI: capitalInicial, intereses: interes_row, capitalF: capitalFinal }
+                table.push(row);
+                capitalInicial = capitalFinal;
+            }
+
+            this.table = table;
+
+        },
+        validacion() {
             //Cuando el año es igual
             if (this.timeTasa == this.unit_time) {
                 if (this.meses_años == "") {
                     this.pagos = this.time;
                     this.tasa_equivalente = this.tasa;
                 } else {
-
+                    this.tasa_equivalente = this.tasa / 12;
+                    this.pagos = (this.time * 12) + parseInt(this.meses_años, 10);;
                 }
             }
             //Interes anual
@@ -82,39 +137,14 @@ const info = new Vue({
                     if (this.unit_time = "8") { this.tasa_equivalente = this.tasa / 12 }
                 }
             }
-
-            var periodo = parseInt(this.pagos, 10);
-            var interes = parseFloat(this.tasa_equivalente);
-            var capitalInicial = parseFloat(this.initial_capital);
-            var interes_acumulado = 0
-
-            var table = []
-
-            for (let i = 0; i <= periodo; i++) {
-                console.log("qlq")
-                if (i == 0) {
-                    var interes_row = 0;
-                } else {
-                    var interes_row = capitalInicial * (interes / 100);
-                }
-                interes_acumulado += interes_row;
-                let capitalFinal = capitalInicial + interes_acumulado;
-                let row = { periodo: i, capitalI: capitalInicial, intereses: interes_row, capitalF: capitalFinal }
-                console.log(row)
-                table.push(row);
-            }
-
-            this.table = table;
-
-
         },
         submit() {
             console.log("se envio")
             if (this.initial_capital != 0 && this.money_initialCapital != 0 && this.tasa != 0 && this.timeTasa != 0 && this.time != 0 && this.unit_time != 0) {
                 if (this.interest_type == 1) {
-                    this.simple()
-                } else if (this.interest_type == 2 && this.frecuency != 00 && this.time_frecuency != 0) {
-                    console.log("mas rico todavia");
+                    this.simple();
+                } else if (this.interest_type == 2) {
+                    this.compuesto();
                 }
             }
         }
