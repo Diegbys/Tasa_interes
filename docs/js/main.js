@@ -2,29 +2,23 @@ const info = new Vue({
     el: '#info',
     data: {
         interest_type: "",
-        interests: [{
-                name: "Simple",
-                value: "1"
-            },
-            {
-                name: "Compuesto",
-                value: "2"
-            }
-
+        interests: [
+            { name: "Simple", value: "1" },
+            { name: "Compuesto", value: "2" }
         ],
         initial_capital: "",
         money_initialCapital: "",
         tasa: "",
         time_interest: [
-            { name: "Anual", value: "1" },
-            { name: "Semestral", value: "2" },
-            { name: "Cuatrimestral", value: "3" },
-            { name: "Trimestral", value: "4" },
-            { name: "Bimestral", value: "5" },
-            { name: "Mensual", value: "6" },
-            { name: "Bimensual", value: "7" },
-            { name: "Semanal", value: "8" },
-            { name: "Diario", value: "9" },
+            { name: "Anual", value: 1, days: 360 },
+            { name: "Semestral", value: 2, days: 180 },
+            { name: "Cuatrimestral", value: 3, days: 120 },
+            { name: "Trimestral", value: 4, days: 90 },
+            { name: "Bimestral", value: 5, days: 60 },
+            { name: "Mensual", value: 6, days: 30 },
+            { name: "Bimensual", value: 7, days: 15 },
+            { name: "Semanal", value: 8, days: 7 },
+            { name: "Diario", value: 9, days: 1 },
         ],
         timeTasa: "",
         time: "",
@@ -33,15 +27,13 @@ const info = new Vue({
         meses: [
             "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
         ],
-        frecuency: "",
         time_frecuency: "",
         pagos: "0",
-        tasa_equivalente: "0",
+        tasa_equivalente: 0,
         table: []
     },
     methods: {
         simple() {
-
             this.validacion();
 
             var periodo = parseInt(this.pagos, 10);
@@ -95,51 +87,26 @@ const info = new Vue({
 
         },
         validacion() {
-            //Cuando el año es igual
-            if (this.timeTasa == this.unit_time) {
-                if (this.meses_años == "") {
-                    this.pagos = this.time;
-                    this.tasa_equivalente = this.tasa;
-                } else {
-                    this.tasa_equivalente = this.tasa / 12;
-                    this.pagos = (this.time * 12) + parseInt(this.meses_años, 10);;
-                }
+            if (this.meses_años != "") {
+                var division = ((this.time_interest[this.unit_time - 1].days + (this.meses_años * 30)) / this.time_interest[this.timeTasa - 1].days)
+            } else {
+                var division = (this.time_interest[this.unit_time - 1].days / this.time_interest[this.timeTasa - 1].days)
             }
-            //Interes anual
-            if (this.timeTasa == "1" && this.unit_time != "1") {
-                this.pagos = this.time;
-                if (this.unit_time == "2") { this.tasa_equivalente = this.tasa / 2 } //tiempo semestre
-                if (this.unit_time == "3") { this.tasa_equivalente = this.tasa / 3 } //tiempo cuatrimestral
-                if (this.unit_time == "4") { this.tasa_equivalente = this.tasa / 4 } //tiempo trimestral
-                if (this.unit_time == "5") { this.tasa_equivalente = this.tasa / 6 } //tiempo Bimestral
-                if (this.unit_time == "6") { this.tasa_equivalente = this.tasa / 12 } //tiempo mensual
-                if (this.unit_time == "7") { this.tasa_equivalente = this.tasa / 24 } //tiempo bimensual
-                if (this.unit_time == "8") { this.tasa_equivalente = this.tasa / 52.1429 } //tiempo semanal
-                if (this.unit_time == "9") { this.tasa_equivalente = this.tasa / 365 } //tiempo diario
-            }
+            this.tasa_equivalente = parseFloat(this.tasa) * division;
+            this.pagos = this.time
 
-            //Interes Semestral
-            if (this.timeTasa == "2" && this.unit_time != "2") {
-                if (this.unit_time == "1") {
-                    this.tasa_equivalente = this.tasa;
-                    this.pagos = this.time * 2;
+            if (this.time_frecuency != "") {
+                if (this.meses_años != "") {
+                    var division2 = ((this.time_interest[this.unit_time - 1].days + (this.meses_años * 30)) / this.time_interest[this.unit_time - 1].days)
+                } else {
+                    var division2 = (this.time_interest[this.time_frecuency - 1].days / this.time_interest[this.unit_time - 1].days)
                 }
-                if (this.unit_time == "3") {
-                    this.tasa_equivalente = this.tasa / 6;
-                    this.pagos = this.time * 4;
-                }
-                if (this.unit_time == "4" || this.unit_time == "5" || this.unit_time == "6" || this.unit_time == "7" || this.unit_time == "8" || this.unit_time == "9") {
-                    this.pagos = this.time;
-                    if (this.unit_time = "4") { this.tasa_equivalente = this.tasa / 2 }
-                    if (this.unit_time = "5") { this.tasa_equivalente = this.tasa / 3 }
-                    if (this.unit_time = "6") { this.tasa_equivalente = this.tasa / 6 }
-                    if (this.unit_time = "7") { this.tasa_equivalente = this.tasa / 12 }
-                    if (this.unit_time = "8") { this.tasa_equivalente = this.tasa / 12 }
-                }
+                var division = (this.time_interest[this.time_frecuency - 1].days / this.time_interest[this.timeTasa - 1].days)
+                this.tasa_equivalente = parseFloat(this.tasa) * division;
+                this.pagos = this.time * division2;
             }
         },
         submit() {
-            console.log("se envio")
             if (this.initial_capital != 0 && this.money_initialCapital != 0 && this.tasa != 0 && this.timeTasa != 0 && this.time != 0 && this.unit_time != 0) {
                 if (this.interest_type == 1) {
                     this.simple();

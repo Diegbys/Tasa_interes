@@ -30,10 +30,10 @@
                     <div class="row">
                         <div class="input-field col s12">
                             <select v-model="interest_type">
-                                <option value="" disabled selected>Seleccione el tipo de interés</option>
+                                <option value="" disabled selected>Tipo de interes</option>
                                 <option v-for="interest in interests" :value="interest.value">{{interest.name}}</option>
                             </select>
-                            <label>Tipo de interés</label>
+                            <label>Seleccione el tipo de interés</label>
                         </div>
                     </div>
                     <div class="row">
@@ -83,29 +83,22 @@
                     </div>
                     <div class="row">
                         <template v-if="interest_type == 1 || interest_type == ''">
-                                <div class="input-field col s3">
-                                    <input disabled v-model="frecuency" id="input_Numeric" type="text" class="validate" onkeypress="return isNumber(event)">
-                                    <label for=" last_name ">Frecuencia</label>
-                                </div>
+                               
                                 <div class="input-field col s1 ">
-                                    <select v-model="time_frecuency">
+                                    <select disabled v-model="time_frecuency">
                                         <option value=" " disabled selected></option>
                                         <option v-for="time in time_interest" :value="time.value">{{time.name}}</option>
                                     </select>
-                                    <label>Unidad</label>
+                                    <label>Frecuencia</label>
                                 </div>
                         </template>
                         <template v-else>
-                                <div class="input-field col s3">
-                                    <input v-model="frecuency" id="input_Numeric" type="text" class="validate" onkeypress="return isNumber(event)">
-                                    <label for=" last_name ">Frecuencia</label>
-                                </div>
                                 <div class="input-field col s1 ">
                                     <select v-model="time_frecuency">
-                                        <option value=" " disabled selected></option>
+                                        <option value=" "  selected></option>
                                         <option v-for="time in time_interest" :value="time.value">{{time.name}}</option>
                                     </select>
-                                    <label>Unidad</label>
+                                    <label>Frecuencia</label>
                                 </div>
                         </template>
                         <div class="input-field col s4">
@@ -149,11 +142,6 @@
 
         </div>
     </div>
-
-
-
-
-
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js "></script>
