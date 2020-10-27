@@ -30,6 +30,7 @@ const info = new Vue({
         time_frecuency: "",
         pagos: "0",
         tasa_equivalente: 0,
+        capital_final: 0,
         table: []
     },
     methods: {
@@ -40,7 +41,7 @@ const info = new Vue({
             var interes = parseFloat(this.tasa_equivalente);
             var capitalInicial = parseFloat(this.initial_capital);
             var interes_acumulado = 0
-
+            var capitalFinal = 0
             var table = []
 
             for (let i = 0; i <= periodo; i++) {
@@ -51,12 +52,12 @@ const info = new Vue({
                     var interes_row = capitalInicial * (interes / 100);
                 }
                 interes_acumulado += interes_row;
-                let capitalFinal = capitalInicial + interes_acumulado;
+                capitalFinal = capitalInicial + interes_acumulado;
                 let row = { periodo: i, capitalI: capitalInicial, intereses: interes_row, capitalF: capitalFinal }
 
                 table.push(row);
             }
-
+            this.capital_final = capitalFinal;
             this.table = table;
 
 
@@ -67,6 +68,7 @@ const info = new Vue({
             var periodo = parseInt(this.pagos, 10);
             var interes = parseFloat(this.tasa_equivalente);
             var capitalInicial = parseFloat(this.initial_capital);
+            var capitalFinal = 0
 
             var table = []
 
@@ -77,12 +79,13 @@ const info = new Vue({
                     var interes_row = capitalInicial * (interes / 100);
                 }
 
-                let capitalFinal = capitalInicial + interes_row;
+                capitalFinal = capitalInicial + interes_row;
                 let row = { periodo: i, capitalI: capitalInicial, intereses: interes_row, capitalF: capitalFinal }
                 table.push(row);
                 capitalInicial = capitalFinal;
             }
 
+            this.capital_final = capitalFinal;
             this.table = table;
 
         },
@@ -97,13 +100,19 @@ const info = new Vue({
 
             if (this.time_frecuency != "") {
                 if (this.meses_años != "") {
-                    var division2 = ((this.time_interest[this.unit_time - 1].days + (this.meses_años * 30)) / this.time_interest[this.unit_time - 1].days)
+                    console.log("conmeses")
+                    var division2 = (this.time_interest[this.unit_time - 1].days  / this.time_interest[this.time_frecuency - 1].days)
+                    let año_suma = this.time * division2;
+                    let transformacion = ((this.meses_años * 30) / (this.time_interest[this.time_frecuency -1].days))
+                    this.pagos = año_suma + transformacion;
+                    
                 } else {
-                    var division2 = (this.time_interest[this.time_frecuency - 1].days / this.time_interest[this.unit_time - 1].days)
+                    console.log("sinmeses")
+                    var division2 = (this.time_interest[this.unit_time - 1].days / this.time_interest[this.time_frecuency - 1].days)
+                    this.pagos = this.time * division2;
                 }
                 var division = (this.time_interest[this.time_frecuency - 1].days / this.time_interest[this.timeTasa - 1].days)
                 this.tasa_equivalente = parseFloat(this.tasa) * division;
-                this.pagos = this.time * division2;
             }
         },
         submit() {
@@ -113,6 +122,9 @@ const info = new Vue({
                 } else if (this.interest_type == 2) {
                     this.compuesto();
                 }
+            } else{
+                alert("Debe llenar los campos minimos (aquellos que tienen '*')")
+
             }
         }
 
@@ -134,7 +146,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function materialize_builder() {
     var elems = document.querySelectorAll('select');
-    var instances = M.FormSelect.init(elems);
+    var instances1 = M.FormSelect.init(elems);   
+    
+    var modal = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(modal);
 }
 
 //Permitir solo escribir numeros y puntos
