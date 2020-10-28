@@ -91,21 +91,28 @@ const info = new Vue({
         },
         validacion() {
             if (this.meses_años != "") {
-                var division = ((this.time_interest[this.unit_time - 1].days + (this.meses_años * 30)) / this.time_interest[this.timeTasa - 1].days)
+                var division2 = (this.time_interest[this.unit_time - 1].days / this.time_interest[this.timeTasa - 1].days)
+                    // let division = (this.time_interest[this.timeTasa - 1].days / this.time_interest[this.unit_time - 1].days)
+                let año_suma = this.time * division2;
+                let transformacion = ((this.meses_años * 30) / (this.time_interest[this.timeTasa - 1].days))
+                this.pagos = año_suma + transformacion;
+                this.tasa_equivalente = this.tasa;
+
             } else {
-                var division = (this.time_interest[this.unit_time - 1].days / this.time_interest[this.timeTasa - 1].days)
+                let division = (this.time_interest[this.unit_time - 1].days / this.time_interest[this.timeTasa - 1].days)
+                this.tasa_equivalente = parseFloat(this.tasa) * division;
+                this.pagos = this.time
             }
-            this.tasa_equivalente = parseFloat(this.tasa) * division;
-            this.pagos = this.time
+
 
             if (this.time_frecuency != "") {
                 if (this.meses_años != "") {
                     console.log("conmeses")
-                    var division2 = (this.time_interest[this.unit_time - 1].days  / this.time_interest[this.time_frecuency - 1].days)
+                    var division2 = (this.time_interest[this.unit_time - 1].days / this.time_interest[this.time_frecuency - 1].days)
                     let año_suma = this.time * division2;
-                    let transformacion = ((this.meses_años * 30) / (this.time_interest[this.time_frecuency -1].days))
+                    let transformacion = ((this.meses_años * 30) / (this.time_interest[this.time_frecuency - 1].days))
                     this.pagos = año_suma + transformacion;
-                    
+
                 } else {
                     console.log("sinmeses")
                     var division2 = (this.time_interest[this.unit_time - 1].days / this.time_interest[this.time_frecuency - 1].days)
@@ -122,7 +129,7 @@ const info = new Vue({
                 } else if (this.interest_type == 2) {
                     this.compuesto();
                 }
-            } else{
+            } else {
                 alert("Debe llenar los campos minimos (aquellos que tienen '*')")
 
             }
@@ -146,8 +153,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function materialize_builder() {
     var elems = document.querySelectorAll('select');
-    var instances1 = M.FormSelect.init(elems);   
-    
+    var instances1 = M.FormSelect.init(elems);
+
     var modal = document.querySelectorAll('.modal');
     var instances = M.Modal.init(modal);
 }
