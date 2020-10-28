@@ -18,7 +18,7 @@
 
     <nav>
         <div class="nav-wrapper blue darken-4">
-            <a href="#" class="brand-logo center"><i class="material-icons left">attach_money</i> Tasa de Interés</a>
+            <a href="#" class="brand-logo center"><i class="material-icons left">attach_money</i>Tasa de Interés</a>
         </div>
     </nav>
 
@@ -31,19 +31,18 @@
                     <div class="row">
                         <div class="input-field col s12">
                             <select v-model="interest_type">
-                                <option value="" disabled selected>Tipo de interes</option>
+                                <option value="" disabled selected>Tipo de interés</option>
                                 <option v-for="interest in interests" :value="interest.value">{{interest.name}}</option>
                             </select>
                             <label>Seleccione el tipo de interés *</label>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="input-field col s2">
-                            <input v-model="initial_capital" id="input_Numeric" type="text" class="validate"
-                                onkeypress="return isNumber(event);">
+                        <div class="input-field col m2 l2 s9">
+                            <input v-model="initial_capital" id="input_Numeric" type="text" class="validate" onkeypress="return isNumber(event);">
                             <label for="last_name">Capital Inicial *</label>
                         </div>
-                        <div class="input-field col s1">
+                        <div class="input-field col m1 l1 s3">
                             <select v-model="money_initialCapital">
                                 <option value="" disabled selected></option>
                                 <option value="BsF">BsF</option>
@@ -53,25 +52,23 @@
                             <label>Moneda *</label>
                         </div>
                         <div class="col s1"></div>
-                        <div class="input-field col s2">
-                            <input v-model="tasa" id="input_Numeric" type="text" class="validate"
-                                onkeypress="return isNumber(event)">
-                            <label for=" last_name ">Tasa de interes % *</label>
+                        <div class="input-field col m2 l2 s9">
+                            <input v-model="tasa" id="input_Numeric" type="text" class="validate" onkeypress="return isNumber(event)">
+                            <label for=" last_name ">Tasa de interés % *</label>
                         </div>
-                        <div class="input-field col s1 time">
+                        <div class="input-field col m1 l1 s3 time">
                             <select v-model="timeTasa">
                                 <option value=" " disabled selected></option>
                                 <option v-for="time in time_interest" :value="time.value">{{time.name}}</option>
                             </select>
-                            <label>interes *</label>
+                            <label>Interés *</label>
                         </div>
                         <div class="col s1"></div>
-                        <div class="input-field col s2">
-                            <input v-model="time" id="input_Numeric" type="text" class="validate"
-                                onkeypress="return isNumber(event);">
+                        <div class="input-field col m2 l2 s6">
+                            <input v-model="time" id="input_Numeric" type="text" class="validate" onkeypress="return isNumber(event);">
                             <label for="last_name">Tiempo *</label>
                         </div>
-                        <div class="input-field col s1 time">
+                        <div class="input-field col m1 l1 time s3">
                             <select v-model="unit_time">
                                 <option value="" disabled selected></option>
                                 <option v-for="time in time_interest" :value="time.value">{{time.name}}</option>
@@ -79,7 +76,7 @@
                             <label>Tiempo *</label>
                         </div>
                         <template v-if="unit_time == 1">
-                            <div class="input-field col s1">
+                            <div class="input-field col m1 l1 s3">
                                 <select v-model="meses_años">
                                     <option value="" selected></option>
                                     <option v-for="mes in meses" :value="mes">{{mes}}</option>
@@ -91,7 +88,7 @@
                     <div class="row">
                         <template v-if="interest_type == 1 || interest_type == ''">
 
-                            <div class="input-field col s1 time">
+                            <div class="input-field col m1 l1 time s6">
                                 <select disabled v-model="time_frecuency">
                                     <option value=" " disabled selected></option>
                                     <option v-for="time in time_interest" :value="time.value">{{time.name}}</option>
@@ -100,7 +97,7 @@
                             </div>
                         </template>
                         <template v-else>
-                            <div class="input-field col s1 time">
+                            <div class="input-field col m1 l1 time s6">
                                 <select v-model="time_frecuency">
                                     <option value=" " selected></option>
                                     <option v-for="time in time_interest" :value="time.value">{{time.name}}</option>
@@ -109,17 +106,17 @@
                             </div>
                         </template>
                         <div class="col s1"></div>
-                        <div class="input-field col s1">
+                        <div class="input-field col m1 l1 s6">
                             <input disabled :value="pagos" id="disabled" type="text" class="validate">
                             <label for="disabled">Pagos</label>
                         </div>
                         <div class="col s1"></div>
-                        <div class="input-field col s3">
+                        <div class="input-field col m3 l3 s6">
                             <input disabled :value="tasa_equivalente + '%'" id="disabled" type="text" class="validate">
                             <label for="disabled">Tasa de interés equivalente</label>
                         </div>
                         <div class="col s1"></div>
-                        <div class="input-field col s3">
+                        <div class="input-field col m3 l3 s6">
                             <input disabled :value="capital_final" id="disabled" type="text" class="validate">
                             <label for="disabled">Capital final</label>
                         </div>
@@ -127,7 +124,7 @@
                 </form>
             </div>
             <div class="row col s12 center">
-                <button style="width: 80%;" href="#" class="btn blue darken-4" v-on:click="submit"> enviar</button>
+                <button style="width: 80%;" href="#" class="btn blue darken-4" v-on:click="submit">enviar</button>
             </div>
             <div class="section">
             </div>
@@ -152,17 +149,6 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-
-            <!--modal-->
-            <div id="modal1" class="modal">
-                <div class="modal-content">
-                    <h4>Modal Header</h4>
-                    <p>A bunch of text</p>
-                </div>
-                <div class="modal-footer">
-                    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-                </div>
             </div>
         </div>
     </div>
